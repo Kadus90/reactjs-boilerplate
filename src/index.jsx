@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import './styles/main.css';
 import App from './App';
 import {DevConfigProvider} from './contexts/devConfigContext';
 
