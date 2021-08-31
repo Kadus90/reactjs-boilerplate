@@ -15,12 +15,12 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "*.js|jsx|ts|tsx": [
+    "*.{js,jsx,ts,tsx}": [
       "prettier --write --ignore-unknown",
       "eslint --fix"
     ],
-    "*.json|css|md": "prettier --write",
-    "*.png|jpeg|jpg|gif|svg": "imagemin-lint-staged"
+    "*.{json,css,md}": "prettier --write",
+    "*.{png,jpeg,jpg,gif,svg}": "imagemin-lint-staged"
   },
   "author": "Julian Phillips",
   "license": "ISC",
