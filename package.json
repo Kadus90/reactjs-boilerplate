@@ -5,7 +5,25 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack serve --config ./webpack.config.js --mode development --env development --open --hot",
-    "build": "webpack --mode=production"
+    "build": "webpack --mode=production",
+    "prettier": "prettier --write \"./**/*.{html,js,jsx,ts,tsx,json}\"",
+    "precommit": "lint-staged && pretty-quick --staged",
+    "postcommit": "git update-index -g",
+    "lint": "eslint . --fix",
+    "cleanup": "npm run prettier && npm run lint",
+    "postinstall": "husky install && npm i"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.+(js|jsx|ts|tsx)": [
+      "eslint --fix",
+      "prettier --write --ignore-unknown"
+    ],
+    "*.+(json|css|md)": "prettier --write"
   },
   "author": "Julian Phillips",
   "license": "ISC",
@@ -18,9 +36,25 @@
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
     "@babel/preset-react": "^7.14.5",
+    "@typescript-eslint/eslint-plugin": "^4.30.0",
+    "@typescript-eslint/parser": "^4.30.0",
     "babel-loader": "^8.2.2",
+    "compression-webpack-plugin": "^8.0.1",
     "css-loader": "^6.2.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.25.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "html-webpack-plugin": "^5.3.2",
+    "husky": "^7.0.2",
+    "lint-staged": "^11.1.2",
+    "prettier": "^2.3.2",
+    "pretty-quick": "^3.1.1",
     "style-loader": "^3.2.1",
     "webpack": "^5.48.0",
     "webpack-cli": "^4.7.2",
