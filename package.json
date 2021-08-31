@@ -11,11 +11,12 @@
     "postcommit": "git update-index -g",
     "lint": "eslint . --fix",
     "cleanup": "npm run prettier && npm run lint",
-    "postinstall": "husky install && npm i"
+    "postinstall": "husky install",
+    "prepare": "husky install"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "echo \"[Husky] pre-commit\" && lint-staged"
     }
   },
   "lint-staged": {
@@ -50,8 +51,9 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.25.1",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-webpack-plugin": "^3.0.1",
     "html-webpack-plugin": "^5.3.2",
-    "husky": "^7.0.2",
+    "husky": "^7.0.0",
     "lint-staged": "^11.1.2",
     "prettier": "^2.3.2",
     "pretty-quick": "^3.1.1",
