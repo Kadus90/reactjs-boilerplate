@@ -3,8 +3,13 @@ const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const {HotModuleReplacementPlugin} = require('webpack');
+
+const mode = process.env.ENV || 'development';
 
 module.exports = {
+  mode,
+  entry: path.join(__dirname, 'src/index.jsx'),
   output: {
     path: path.resolve(__dirname, 'build'),
     publicPath: '/',
@@ -16,6 +21,12 @@ module.exports = {
     alias: {
       react: path.join(__dirname, 'node_modules', 'react'),
     },
+  },
+  devServer: {
+    port: 8080,
+    hot: true,
+    open: true,
+    historyApiFallback: true,
   },
   module: {
     rules: [
@@ -40,8 +51,12 @@ module.exports = {
     ],
   },
   plugins: [
+    new HotModuleReplacementPlugin(),
     new HtmlWebPackPlugin({
-      template: './src/index.html',
+      favicon: false,
+      showErrors: true,
+      cache: true,
+      template: path.join(__dirname, './src/index.html'),
     }),
     new CompressionPlugin({
       test: /\.js(\?.*)?$/i,

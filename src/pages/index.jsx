@@ -15,9 +15,10 @@ const Index = () => {
       <ul>
         <li>Page routing via react-router-dom</li>
         <li>Context example</li>
+        <li>Base styling</li>
       </ul>
       <h3>Dev Dependency Configuration</h3>
-      <ul>{renderDevConfigList(devConfig)}</ul>
+      <ul>{renderDevConfigList.length > 0 && renderDevConfigList(devConfig)}</ul>
     </div>
   );
 };
