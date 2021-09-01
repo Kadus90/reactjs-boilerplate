@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 
 import DevConfigContext from '../contexts/devConfigContext';
-import {PageWrapper} from '../components/Page/Page.styles';
+import {Page} from '../components/Page/Page';
 
 const Index = () => {
   const devConfig = useContext(DevConfigContext);
@@ -10,7 +10,7 @@ const Index = () => {
   const renderDevConfigList = (configItem) => configItem.map((item, i) => <li key={`devConfigItem${i}`}>{item}</li>);
 
   return (
-    <PageWrapper>
+    <Page>
       <h1>React Boilerplate</h1>
       <h2>Completed Initial Features</h2>
       <h3>Front End</h3>
@@ -22,7 +22,7 @@ const Index = () => {
       </ul>
       <h3>Dev Dependency Configuration</h3>
       <ul>{renderDevConfigList.length > 0 && renderDevConfigList(devConfig)}</ul>
-    </PageWrapper>
+    </Page>
   );
 };
 
