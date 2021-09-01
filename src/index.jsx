@@ -4,7 +4,16 @@ import './styles/main.css';
 import App from './App';
 import {DevConfigProvider} from './contexts/devConfigContext';
 
-const DevConfig = ['Webpack', 'ESLint', 'Prettier', 'Husky', 'Lint-Staged', 'Commitlint'];
+const DevConfig = [
+  'Webpack',
+  'ESLint',
+  'Prettier',
+  'Husky',
+  'Lint-Staged',
+  'Commitlint',
+  'Jest',
+  'React Testing Library',
+];
 
 ReactDOM.render(
   <React.StrictMode>
