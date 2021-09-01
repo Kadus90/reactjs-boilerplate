@@ -13,6 +13,7 @@ const DevConfig = [
   'Commitlint',
   'Jest',
   'React Testing Library',
+  'JSDoc',
 ];
 
 ReactDOM.render(
