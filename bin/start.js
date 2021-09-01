@@ -6,10 +6,9 @@ const {exec} = require('child_process');
 
 const packageJson = require('../package.json');
 
-const scripts = `"start": "webpack serve --config ./webpack.config.js --mode development --env development --open --hot",
-    "build": "webpack --mode=production"`;
-
-const babel = `"babel": ${JSON.stringify(packageJson.babel)}`;
+const rawScripts = `${JSON.stringify(packageJson.scripts)}`;
+const scripts = rawScripts.slice(1, rawScripts.length - 1);
+const lintStaged = `"lint-staged": ${JSON.stringify(packageJson['lint-staged'])}`;
 
 const getDeps = (deps) =>
   Object.entries(deps)
@@ -19,7 +18,7 @@ const getDeps = (deps) =>
     .replace(/^/g, '')
     .replace(/fs-extra[^\s]+/g, '');
 
-console.log('Initializing project..');
+console.log('Initializing project...');
 
 exec(`mkdir ${process.argv[2]} && cd ${process.argv[2]} && npm init -f`, (initErr, initStdout, initStderr) => {
   if (initErr) {
@@ -30,16 +29,27 @@ exec(`mkdir ${process.argv[2]} && cd ${process.argv[2]} && npm init -f`, (initEr
   const packageJSON = `${process.argv[2]}/package.json`;
 
   // replace the default scripts
-  fs.readFile(packageJson, (err, file) => {
+  fs.readFile(packageJSON, (err, file) => {
     if (err) throw err;
+
     const data = file
       .toString()
-      .replace('"test": "echo\\"Error: no test specified\\" && exit 1"', scripts)
-      .replace('"keywords": []', babel);
-    fs.writeFile(packageJson, data, (err2) => err2 || true);
+      .replace('"test": "echo \\"Error: no test specified\\" && exit 1"', scripts)
+      .replace('"keywords": []', lintStaged);
+    fs.writeFile(packageJSON, data, (err2) => err2 || true);
   });
 
-  const filesToCopy = ['webpack.config.js'];
+  console.log('Copying over config files...');
+
+  const filesToCopy = [
+    '.babelrc',
+    '.eslintignore',
+    '.eslintrc.json',
+    '.prettierrc',
+    'commitlint.config.js',
+    'jest.config.js',
+    'webpack.config.js',
+  ];
 
   for (let i = 0; i < filesToCopy.length; i += 1) {
     fs.createReadStream(path.join(__dirname, `../${filesToCopy[i]}`)).pipe(
@@ -67,7 +77,7 @@ exec(`mkdir ${process.argv[2]} && cd ${process.argv[2]} && npm init -f`, (initEr
   const devDeps = getDeps(packageJson.devDependencies);
   const deps = getDeps(packageJson.dependencies);
   exec(
-    `cd ${process.argv[2]} && git init && node -v && npm -v && npm i -D ${devDeps} && npm i -S ${deps}`,
+    `cd ${process.argv[2]} && git init && node -v && npm -v && npm i -S ${deps} && npm i -D ${devDeps}`,
     (npmErr, npmStdout, npmStderr) => {
       if (npmErr) {
         console.error(`Some errors occured while installing dependencies: ${npmErr}`);
@@ -78,6 +88,12 @@ exec(`mkdir ${process.argv[2]} && cd ${process.argv[2]} && npm init -f`, (initEr
       console.log('Dependencies installed');
 
       console.log('Copying additional files');
+      fs.copy(path.join(__dirname, '../.husky'), `${process.argv[2]}/.husky`)
+        .then(() => {
+          console.log(`Feeling husky...`);
+        })
+        .catch((err) => console.error(err));
+
       fs.copy(path.join(__dirname, '../src'), `${process.argv[2]}/src`)
         .then(() =>
           console.log(
